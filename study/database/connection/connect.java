@@ -5,18 +5,22 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class connect {
-    public static void main(String[] args) {
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-            String username = "root";
-            String password = "admin";
+    private static Connection conn = null;
+    public static Connection getConnection() {
+        try {
+            if (conn == null || conn.isClosed()) {
+                Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+                String username = "root";
+                String password = "admin";
 
-            Connection conn = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/java_db",
-                    username, password);
-
-            System.out.println("Connection Success");
+                conn = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/java_db",
+                        username, password);
+            }
         } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
+
+        return conn;
     }
 }
